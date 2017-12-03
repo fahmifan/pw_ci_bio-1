@@ -33,7 +33,8 @@ class Login extends CI_Controller {
 		);
 		$users_user = array(
 			'username' => $this->input->post('username'),
-			'password' => sha1( $this->input->post('password') )
+			'password' => sha1( $this->input->post('password') ),
+			'npm' => $this->input->post('npm')
 		);
 
 		if( $this->model_user->input($user_identitas, $users_user) )

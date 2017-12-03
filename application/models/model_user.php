@@ -5,11 +5,11 @@ class Model_user extends CI_Model {
 	public function login($userdata)
 	{
 		$result = $this->db->get_where('users',
-				array( 
-					'username'=> $userdata['username'],
-					'password' => $userdata['password'] 
-				) 
-			);
+			array( 
+				'username'=> $userdata['username'],
+				'password' => $userdata['password'] 
+			) 
+		);
 		return $result;
 	}
 	
