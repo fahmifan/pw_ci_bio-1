@@ -24,6 +24,7 @@ class Login extends CI_Controller {
 
 	public function input_data()
 	{
+
 		$user_identitas = array(
 			'npm' => $this->input->post('npm'),
 			'nama' => $this->input->post('nama'),
@@ -37,9 +38,8 @@ class Login extends CI_Controller {
 
 		if( $this->model_user->input($user_identitas, $users_user) )
 		{
-			$data['mhs'] = $this->model_user->tampil();
-			$this->load->view('tampil_data', $data);
-		}else {
+			redirect(base_url('index.php/login'));
+		} else {
 			$this->load->view('login');
 		}
 	}
@@ -55,23 +55,33 @@ class Login extends CI_Controller {
 			return;
 		}
 		$sess_user = array(
-			'username' => $users_user['username'],
-			'npm' => $users_user['npm'],
+			'username' => $result->row('username'),
+			'npm' => $result->row('npm'),
+			'level' => $result->row('level'),
 			'status' => 'login'
 		);
 		
 		$this->session->set_userdata($sess_user);
-		redirect(base_url('index.php/login/tampil_data'));
-		
+		redirect(base_url('index.php/login/tampil_data'));		
 	}
+
+	public function logout() {
+		$this->session->sess_destroy();
+		redirect(base_url('index.php/login'));
+	}
+
 	public function tampil_data()
 	{
 		if($this->session->userdata('status') !== 'login') {
 			redirect(base_url('index.php/login/'));
 			return;
 		}
-
-		$data["mhs"] = $this->model_user->tampil();
+		else if($this->session->userdata('level') === '1') {
+			$data["mhs"] = $this->model_user->tampilAll();
+		} else {
+			$npm = $this->session->userdata('npm');
+			$data["mhs"] = $this->model_user->tampilByUser($npm);
+		}
 		$this->load->view('tampil_data', $data);
 	}
 

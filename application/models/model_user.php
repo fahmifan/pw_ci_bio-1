@@ -24,9 +24,15 @@ class Model_user extends CI_Model {
 		}
 	}
 
-	public function tampil()
+	public function tampilAll()
 	{
 		$query = $this->db->get('identitas');
+		return $query;
+	}
+
+	public function tampilByUser($npm)
+	{
+		$query = $this->db->get_where('identitas', array('npm' => $npm));
 		return $query;
 	}
 
